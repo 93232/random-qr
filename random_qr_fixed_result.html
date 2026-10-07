@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>랜덤 QR 샘플</title>
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+    }
+    body {
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    #number {
+      font-size: min(60vw, 60vh);
+      font-weight: 900;
+      line-height: 1;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="number" aria-label="랜덤 결과"></div>
+
+  <script>
+    const storageKey = "randomQRResult_v1";
+
+    let result = localStorage.getItem(storageKey);
+
+    if (!result) {
+      result = String(Math.floor(Math.random() * 4) + 1);
+      localStorage.setItem(storageKey, result);
+    }
+
+    document.getElementById("number").textContent = result;
+  </script>
+</body>
+</html>

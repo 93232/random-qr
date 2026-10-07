@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>3번 결과</title>
+  <style>
+    html, body { margin: 0; width: 100%; min-height: 100%; background: #000; }
+    body { display: flex; justify-content: center; align-items: flex-start; padding: 0; }
+    .wrap { width: 100%; max-width: 540px; min-height: 100vh; background: #000; }
+    img { display: block; width: 100%; height: auto; }
+  </style>
+</head>
+<body>
+  <div class="wrap"><img src="page3_poster.png" alt="미니 포스터" /></div>
+  <script>
+    const storageKey = 'randomQRResult_v4';
+    const result = localStorage.getItem(storageKey);
+    if (result && result !== '3') window.location.replace(result + '.html');
+  </script>
+</body>
+</html>

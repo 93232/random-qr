@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#050505" />
+  <title>소크라테스 패러독스 QR 이벤트</title>
+  <style>
+    :root {
+      --green: #baff00;
+      --max: 560px;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at 50% 18%, rgba(186,255,0,.10), transparent 28%),
+        linear-gradient(#050505, #020202);
+      color: #fff;
+      font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   "Noto Sans KR", Arial, sans-serif;
+    }
+    body {
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+    }
+    .page {
+      width: 100%;
+      max-width: var(--max);
+      min-height: 100dvh;
+      padding: max(20px, env(safe-area-inset-top)) 18px
+               max(28px, env(safe-area-inset-bottom));
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .topbar {
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(10,10,10,.84);
+      padding: 13px 14px 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .topbar::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 72px;
+      height: 4px;
+      background: var(--green);
+      box-shadow: 0 0 18px var(--green);
+    }
+    .date {
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+    .clock {
+      margin-top: 5px;
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      color: var(--green);
+      letter-spacing: .08em;
+    }
+    .card {
+      position: relative;
+      flex: 1;
+      min-height: 620px;
+      border: 1px solid rgba(255,255,255,.76);
+      background:
+        linear-gradient(135deg, var(--green) 0 20px, transparent 20px) top left / 88px 88px no-repeat,
+        linear-gradient(315deg, var(--green) 0 28px, transparent 28px) bottom right / 110px 110px no-repeat,
+        #080808;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(186,255,0,.06),
+        0 0 42px rgba(186,255,0,.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 34px 24px 26px;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      pointer-events: none;
+    }
+    .mini-ui {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+      font-size: 11px;
+      color: rgba(255,255,255,.42);
+      letter-spacing: .15em;
+    }
+    .slashes { color: var(--green); }
+    .result-wrap {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 42px 0 30px;
+    }
+    .mark {
+      width: 122px;
+      height: 122px;
+      margin: 0 auto 30px;
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+    .mark::before,
+    .mark::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 2px solid var(--green);
+      transform: rotate(45deg);
+      box-shadow: 0 0 24px rgba(186,255,0,.18);
+    }
+    .mark::after {
+      inset: 22px;
+      border-width: 1px;
+      border-color: rgba(255,255,255,.72);
+      transform: rotate(0deg);
+    }
+    .mark-symbol {
+      position: relative;
+      z-index: 2;
+      font-size: 52px;
+      line-height: 1;
+      color: var(--green);
+      text-shadow: 0 0 18px rgba(186,255,0,.25);
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(54px, 16vw, 86px);
+      line-height: .95;
+      font-weight: 1000;
+      letter-spacing: -.07em;
+    }
+    .success h1 { color: var(--green); }
+    .fail h1 { color: #fff; }
+    .underline {
+      width: 72%;
+      max-width: 310px;
+      height: 5px;
+      margin: 18px auto 0;
+      background: var(--green);
+      transform: skewX(-28deg);
+      box-shadow: 0 0 15px rgba(186,255,0,.22);
+    }
+    .message {
+      margin: 34px auto 0;
+      max-width: 390px;
+      font-size: 18px;
+      line-height: 1.65;
+      font-weight: 760;
+      word-break: keep-all;
+    }
+    .message strong { color: var(--green); }
+    .footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid rgba(255,255,255,.15);
+      padding-top: 18px;
+      display: grid;
+      gap: 7px;
+      color: rgba(255,255,255,.64);
+      font-size: 12px;
+      line-height: 1.5;
+      word-break: keep-all;
+    }
+    .footer p { margin: 0; }
+@media (max-width: 390px) {
+      .page { padding-left: 12px; padding-right: 12px; }
+      .card { padding-left: 18px; padding-right: 18px; min-height: 590px; }
+      .message { font-size: 16px; }
+      .footer { font-size: 11px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="topbar" aria-label="대한민국 현재 날짜와 시간">
+      <div id="date" class="date">날짜 불러오는 중</div>
+      <div id="clock" class="clock">00:00:00 KST</div>
+    </header>
+
+    <section id="resultCard" class="card">
+      <div class="mini-ui">
+        <span>SOCRATES PARADOX</span>
+        <span class="slashes">///</span>
+      </div>
+
+      <div id="resultWrap" class="result-wrap">
+        <div class="mark" aria-hidden="true">
+          <span id="markSymbol" class="mark-symbol">✦</span>
+        </div>
+
+        <h1 id="resultTitle">...</h1>
+        <div class="underline"></div>
+
+        <p class="message">
+          해당 화면을 <strong>적립부스에 제시</strong>해 주시면<br>
+          경품을 수령하실 수 있습니다.
+        </p>
+      </div>
+
+      <footer class="footer">
+        <p>*캡쳐된 화면으로는 증빙 불가</p>
+        <p>*도장이 날인된 티켓으로는 재참여 불가</p>
+        <p>*당일 수령만 가능</p>
+</footer>
+    </section>
+  </main>
+
+  <script>
+    const RESULT_STORAGE_KEY = "socratesCatchResult_v1";
+
+    function getLockedResult() {
+      let result = localStorage.getItem(RESULT_STORAGE_KEY);
+
+      if (result !== "success" && result !== "fail") {
+        result = Math.random() < 0.5 ? "success" : "fail";
+        localStorage.setItem(RESULT_STORAGE_KEY, result);
+      }
+
+      return result;
+    }
+
+    function renderResult() {
+      const result = getLockedResult();
+      const card = document.getElementById("resultCard");
+      const wrap = document.getElementById("resultWrap");
+      const title = document.getElementById("resultTitle");
+      const symbol = document.getElementById("markSymbol");
+
+      wrap.classList.remove("success", "fail");
+      wrap.classList.add(result);
+
+      if (result === "success") {
+        title.textContent = "잡았다!";
+        symbol.textContent = "✦";
+      } else {
+        title.textContent = "놓쳤다!";
+        symbol.textContent = "×";
+      }
+
+      card.dataset.result = result;
+    }
+
+    let serverOffsetMs = 0;
+
+    async function syncServerTime() {
+      try {
+        const url = new URL(location.href);
+        url.searchParams.set("_clock", Date.now());
+
+        const response = await fetch(url.toString(), {
+          method: "HEAD",
+          cache: "no-store"
+        });
+
+        const serverDate = response.headers.get("date");
+        if (serverDate) {
+          const serverMs = new Date(serverDate).getTime();
+          if (Number.isFinite(serverMs)) {
+            serverOffsetMs = serverMs - Date.now();
+          }
+        }
+      } catch (_) {}
+    }
+
+    function getKstParts(date) {
+      const formatter = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Seoul",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+      });
+
+      const parts = Object.fromEntries(
+        formatter.formatToParts(date)
+          .filter(part => part.type !== "literal")
+          .map(part => [part.type, part.value])
+      );
+
+      const weekdayText = new Intl.DateTimeFormat("ko-KR", {
+        timeZone: "Asia/Seoul",
+        weekday: "short"
+      }).format(date);
+
+      return { ...parts, weekdayText };
+    }
+
+    function renderClock() {
+      const now = new Date(Date.now() + serverOffsetMs);
+      const p = getKstParts(now);
+
+      document.getElementById("date").textContent =
+        `${p.year}년 ${Number(p.month)}월 ${Number(p.day)}일 (${p.weekdayText})`;
+
+      document.getElementById("clock").textContent =
+        `${p.hour}:${p.minute}:${p.second} KST · 대한민국 표준시`;
+    }
+
+    renderResult();
+    renderClock();
+    syncServerTime().then(renderClock);
+
+    setInterval(renderClock, 1000);
+    setInterval(syncServerTime, 5 * 60 * 1000);
+  </script>
+</body>
+</html>

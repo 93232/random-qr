@@ -222,21 +222,14 @@
   </main>
 
   <script>
-    const RESULT_STORAGE_KEY = "socratesCatchResult_v1";
-
-    function getLockedResult() {
-      let result = localStorage.getItem(RESULT_STORAGE_KEY);
-
-      if (result !== "success" && result !== "fail") {
-        result = Math.random() < 0.5 ? "success" : "fail";
-        localStorage.setItem(RESULT_STORAGE_KEY, result);
-      }
-
-      return result;
+    function getRandomResult() {
+      // 매번 새로고침/재접속할 때 다시 추첨
+      // 잡았다 20%, 놓쳤다 80%
+      return Math.random() < 0.2 ? "success" : "fail";
     }
 
-    function renderResult() {
-      const result = getLockedResult();
+function renderResult() {
+      const result = getRandomResult();
       const card = document.getElementById("resultCard");
       const wrap = document.getElementById("resultWrap");
       const title = document.getElementById("resultTitle");
